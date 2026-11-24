@@ -1,0 +1,46 @@
+{
+  "case_id": "demo_transient_margin",
+  "required_copies": 2,
+  "batch_count": 2,
+  "domains": ["D1", "D2", "D3", "D4"],
+  "root_cabinets": ["C1", "C2", "C3", "C4"],
+  "cabinets": [
+    {"id": "C1", "domain": "D1", "edges": ["C2"]},
+    {"id": "C2", "domain": "D2", "edges": []},
+    {"id": "C3", "domain": "D3", "edges": []},
+    {"id": "C4", "domain": "D4", "edges": ["C3"]}
+  ],
+  "copies": [
+    {"id": "pA1", "digest": "A", "holder": "C1"},
+    {"id": "pA2", "digest": "A", "holder": "C2"},
+    {"id": "pA3", "digest": "A", "holder": "C3"},
+    {"id": "pA4", "digest": "A", "holder": "C4"},
+    {"id": "pB1", "digest": "B", "holder": "C1"},
+    {"id": "pB2", "digest": "B", "holder": "C2"},
+    {"id": "pB3", "digest": "B", "holder": "C3"},
+    {"id": "pB4", "digest": "B", "holder": "C4"}
+  ],
+  "envelopes": [],
+  "manifests": [
+    {"id": "M1", "content_digests": ["B"], "envelope_digests": []},
+    {"id": "M1A", "content_digests": ["A"], "envelope_digests": [],
+     "copies_required": 1}
+  ],
+  "work_orders": [
+    {"id": "WO-KILL-M1A", "kind": "invalidate",
+     "manifest_id": "M1A", "deadline_batch": 1},
+    {"id": "WO-RETIRE-A", "kind": "retire_digest",
+     "digest": "A", "deadline_batch": 2}
+  ],
+  "decommissions": [],
+  "operations": [
+    {"id": "op-kill-m1a", "kind": "invalidate", "manifest_id": "M1A",
+     "batch_from": 1, "batch_to": 1, "cost": 1},
+    {"id": "op-purge-a", "kind": "cleanup", "digest": "A",
+     "batch_from": 2, "batch_to": 2, "cost": 1},
+    {"id": "op-consolidate-early", "kind": "migrate", "cabinet_id": "C3",
+     "new_domain": "D2", "batch_from": 1, "batch_to": 1, "cost": 5},
+    {"id": "op-consolidate-late", "kind": "migrate", "cabinet_id": "C3",
+     "new_domain": "D2", "batch_from": 2, "batch_to": 2, "cost": 5}
+  ]
+}

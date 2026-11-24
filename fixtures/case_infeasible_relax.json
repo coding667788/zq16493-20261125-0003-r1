@@ -1,0 +1,37 @@
+{
+  "case_id": "demo_infeasible_relax",
+  "required_copies": 2,
+  "batch_count": 2,
+  "domains": ["D1", "D2", "D3"],
+  "root_cabinets": ["C1", "C2", "C3"],
+  "cabinets": [
+    {"id": "C1", "domain": "D1", "edges": ["C2"]},
+    {"id": "C2", "domain": "D2", "edges": []},
+    {"id": "C3", "domain": "D3", "edges": []}
+  ],
+  "copies": [
+    {"id": "pQ1", "digest": "Q", "holder": "C1"},
+    {"id": "pQ2", "digest": "Q", "holder": "C2"},
+    {"id": "pQ3", "digest": "Q", "holder": "C3"},
+    {"id": "pS1", "digest": "S", "holder": "C1"},
+    {"id": "pS2", "digest": "S", "holder": "C2"},
+    {"id": "pS3", "digest": "S", "holder": "C3"}
+  ],
+  "envelopes": [],
+  "manifests": [
+    {"id": "M1", "content_digests": ["Q", "S"], "envelope_digests": []}
+  ],
+  "work_orders": [
+    {"id": "WO-KILL-M1", "kind": "invalidate",
+     "manifest_id": "M1", "deadline_batch": 2},
+    {"id": "WO-RETIRE-Q", "kind": "retire_digest",
+     "digest": "Q", "deadline_batch": 1}
+  ],
+  "decommissions": [],
+  "operations": [
+    {"id": "op-kill-m1", "kind": "invalidate", "manifest_id": "M1",
+     "batch_from": 2, "batch_to": 2, "cost": 1},
+    {"id": "op-clean-q", "kind": "cleanup", "digest": "Q",
+     "batch_from": 1, "batch_to": 2, "cost": 2}
+  ]
+}

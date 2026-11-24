@@ -1,0 +1,38 @@
+{
+  "case_id": "demo_migration_proof",
+  "required_copies": 2,
+  "batch_count": 3,
+  "domains": ["D1", "D2", "D3", "D4", "D5"],
+  "root_cabinets": ["RA", "RB", "RC"],
+  "cabinets": [
+    {"id": "RA", "domain": "D1", "edges": ["CX", "CY"]},
+    {"id": "RB", "domain": "D4", "edges": ["CX", "CY"]},
+    {"id": "RC", "domain": "D5", "edges": []},
+    {"id": "CX", "domain": "D2", "edges": ["CY"]},
+    {"id": "CY", "domain": "D3", "edges": []}
+  ],
+  "copies": [
+    {"id": "pB1", "digest": "B", "holder": "CX"},
+    {"id": "pB2", "digest": "B", "holder": "CY"},
+    {"id": "pB3", "digest": "B", "holder": "RC"}
+  ],
+  "envelopes": [],
+  "manifests": [
+    {"id": "M1", "content_digests": ["B"], "envelope_digests": []}
+  ],
+  "work_orders": [
+    {"id": "WO-KILL-M1", "kind": "invalidate",
+     "manifest_id": "M1", "deadline_batch": 3}
+  ],
+  "decommissions": [
+    {"cabinet_id": "RA", "after_batch": 1},
+    {"cabinet_id": "RB", "after_batch": 2}
+  ],
+  "operations": [
+    {"id": "op-kill-m1", "kind": "invalidate", "manifest_id": "M1",
+     "batch_from": 3, "batch_to": 3, "cost": 1},
+    {"id": "op-mig-early", "kind": "migrate", "cabinet_id": "RC",
+     "new_edges": ["CX"],
+     "batch_from": 1, "batch_to": 2, "cost": 4}
+  ]
+}

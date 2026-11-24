@@ -1,0 +1,59 @@
+{
+  "case_id": "demo_shared_envelope",
+  "required_copies": 2,
+  "batch_count": 2,
+  "domains": ["D1", "D2", "D3", "D4"],
+  "root_cabinets": ["C1", "C2", "C3", "C4"],
+  "cabinets": [
+    {"id": "C1", "domain": "D1", "edges": []},
+    {"id": "C2", "domain": "D2", "edges": []},
+    {"id": "C3", "domain": "D3", "edges": []},
+    {"id": "C4", "domain": "D4", "edges": []}
+  ],
+  "copies": [
+    {"id": "pX1", "digest": "X", "holder": "C1"},
+    {"id": "pX2", "digest": "X", "holder": "C2"},
+    {"id": "pX3", "digest": "X", "holder": "C4"},
+    {"id": "pY1", "digest": "Y", "holder": "C1"},
+    {"id": "pY2", "digest": "Y", "holder": "C3"},
+    {"id": "pY3", "digest": "Y", "holder": "C4"},
+    {"id": "pZ1", "digest": "Z", "holder": "C2"},
+    {"id": "pZ2", "digest": "Z", "holder": "C3"},
+    {"id": "pZ3", "digest": "Z", "holder": "C4"},
+    {"id": "pE1", "digest": "ENV", "holder": "C1"},
+    {"id": "pE2", "digest": "ENV", "holder": "C2"},
+    {"id": "pE3", "digest": "ENV", "holder": "C4"},
+    {"id": "pF1", "digest": "ENV2", "holder": "C3"},
+    {"id": "pF2", "digest": "ENV2", "holder": "C4"},
+    {"id": "pF3", "digest": "ENV2", "holder": "C1"}
+  ],
+  "envelopes": [
+    {"id": "E1", "digest": "ENV"},
+    {"id": "E2", "digest": "ENV2"}
+  ],
+  "manifests": [
+    {"id": "M1", "content_digests": ["X"], "envelope_digests": ["ENV"]},
+    {"id": "M2", "content_digests": ["Y"], "envelope_digests": ["ENV"]},
+    {"id": "M3", "content_digests": ["Z"], "envelope_digests": ["ENV2"]}
+  ],
+  "work_orders": [
+    {"id": "WO-KILL-M1", "kind": "invalidate",
+     "manifest_id": "M1", "deadline_batch": 1},
+    {"id": "WO-KILL-M2", "kind": "invalidate",
+     "manifest_id": "M2", "deadline_batch": 1}
+  ],
+  "decommissions": [],
+  "operations": [
+    {"id": "op-kill-m1", "kind": "invalidate", "manifest_id": "M1",
+     "batch_from": 1, "batch_to": 1, "cost": 1},
+    {"id": "op-kill-m2", "kind": "invalidate", "manifest_id": "M2",
+     "batch_from": 1, "batch_to": 1, "cost": 1},
+    {"id": "op-clean-env", "kind": "cleanup", "digest": "ENV",
+     "batch_from": 2, "batch_to": 2, "cost": 2},
+    {"id": "op-clean-z", "kind": "cleanup", "digest": "Z",
+     "batch_from": 2, "batch_to": 2, "cost": 2},
+    {"id": "op-rebind-m3", "kind": "rebind", "manifest_id": "M3",
+     "old_digest": "Z", "new_digest": "X",
+     "batch_from": 1, "batch_to": 2, "cost": 3}
+  ]
+}
